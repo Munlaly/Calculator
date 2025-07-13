@@ -13,7 +13,7 @@ body{
 }
 
 #calculator{
-    padding: 10px;
+    padding: 20px;
     border: 8px solid #00F5D4;
     border-radius: 10%;
     display: flex;
@@ -44,7 +44,7 @@ input{
 
 #menu button{
     background-color: #F15BB5;
-    text-shadow:none;
+    text-shadow: none;
 }
 
 .row{
@@ -79,4 +79,12 @@ button{
 #decimal-point{
     font-size: 2rem;
     font-weight: bold;
+}
+
+#parantesis{
+    color: #FF6B35;
+}
+
+#decimal-point{
+    color: #FF6B35;
 }
