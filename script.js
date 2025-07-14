@@ -66,6 +66,10 @@ function evaluateExpression(expression){
             const operator = token.value;
             if( operator === '√'){
                 const num = stack.pop();
+                if( num <= 0){
+                    alert('Negative square root not allowed!');
+                    return;
+                }
                 stack.push(Math.sqrt(num));
             }
             else {
@@ -101,6 +105,34 @@ function evaluateExpression(expression){
         }
     }
     return stack.pop();
+}
+
+function validateExpression(){
+    const len = expression.length;
+    if(len <= 0 && currentNumber === '')  return 'Empty expression';
+    if(currentNumber === '' && expression[len - 1].type === 'operator') return 'Expression cannot end with operator';
+    for(let i = 1; i < len; ++i){
+        const current = expression[i];
+        const prev = expression[i - 1];
+          if (current.type === 'operator' && prev.type === 'operator') {
+            const currVal = current.value;
+            const prevVal = prev.value;
+
+            // Allow √ after any operator 
+            if (currVal === '√') continue;
+
+            // Allow + / - after √ 
+            if (prevVal === '√' && (currVal === '+' || currVal === '-')) continue;
+
+            return `Invalid operator sequence: "${prevVal} ${currVal}"`;
+        }
+    }
+    // parentheses check needed
+    if (currentNumber.split('.').length > 2) {
+        return 'Invalid number format: too many decimal points.';
+    }
+
+    return null;
 }
 
 
@@ -161,6 +193,12 @@ equalBtn.addEventListener('click', () => {
     if (currentNumber) {
         expression.push({ type: 'number', value: currentNumber });
         currentNumber = '';
+    }
+
+    const validationError = validateExpression();
+    if(validationError){
+        alert(validationError);
+        return;
     }
 
     const postfix = toPostfix(expression);
