@@ -6,6 +6,7 @@ const acBtn = document.querySelector('#clear-all');
 const parantasisBtn = document.querySelector('#parantesis');
 
 
+
 let expression = [];
 let currentNumber = '';
 
