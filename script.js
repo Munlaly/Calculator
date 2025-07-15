@@ -5,6 +5,8 @@ const deleteBtn = document.querySelector('#delete');
 const acBtn = document.querySelector('#clear-all');
 const equalBtn = document.querySelector('#equal');
 const decimalPointBtn = document.querySelector('#decimal-point');
+const openingBraceBtn = document.querySelector('#opening-brace');
+const closingBraceBtn = document.querySelector('#closing-brace');
 
 
 let expression = [];
@@ -59,6 +61,22 @@ function toPostfix(tokens){
             }
             stack.push(token);
         }
+        else if(token.type === 'brace'){
+            if(token.value === '(') {
+                stack.push(token);
+            }
+            else{
+                while(stack.length && stack[stack.length - 1].value !== '('){
+                    output.push(stack.pop());
+                }
+                // ensure parenthesis are matched correctly
+                if (stack.length === 0) {
+                    throw new Error("Mismatched parentheses detected in toPostfix");
+                }
+                stack.pop(); // remove opening brace from stack
+            }
+            
+        }
 
     }
 
@@ -101,7 +119,11 @@ function evaluateExpression(expression){
                         break;
                     }
                     case '/':{
-                        if(num2 !== 0) stack.push(num1 / num2);
+                       if (num2 === 0) {
+                            alert("Division by zero is undefined.");
+                            return;
+                        }
+                        stack.push(num1 / num2);
                         break;
                     }
                     case '%':{
@@ -123,10 +145,14 @@ function validateExpression(){
     const len = expression.length;
     if(len <= 0 && currentNumber === '')  return 'Empty expression';
     if(currentNumber === '' && expression[len - 1].type === 'operator') return 'Expression cannot end with operator';
-    for(let i = 1; i < len; ++i){
+    const stack = [];
+    
+    for(let i = 0; i < len; ++i){
         const current = expression[i];
         const prev = expression[i - 1];
-          if (current.type === 'operator' && prev.type === 'operator') {
+        const next = expression[i + 1];
+        
+          if ( prev && (current.type === 'operator' && prev.type === 'operator')) {
             const currVal = current.value;
             const prevVal = prev.value;
 
@@ -138,8 +164,23 @@ function validateExpression(){
 
             return `Invalid operator sequence: "${prevVal} ${currVal}"`;
         }
+
+        if(current.type === 'brace'){
+            if(current.value === '(') {
+                stack.push('(');
+                if(prev && (prev.type === 'number' || prev.value === ')')) return 'Invalid syntax: "(" cannot follow a number or ")"';
+                if( next && (next.type === 'brace' && next.value === ')')) return 'Invalid syntax: empty parentheses "()"';
+            }
+            else {
+                if( stack.length === 0) return 'Mismatched closing parenthesis';
+                if( prev && prev.type === 'operator') return 'Invalid syntax: ")" cannot follow an operator';
+                stack.pop();
+            }
+        }
     }
-    // parentheses check needed
+    if(stack.length > 0) return  'Mismatched opening parenthesis';
+    
+   
     if (currentNumber !== ''){
     let error = validateCurrentNumber();
     return error;
@@ -210,7 +251,7 @@ deleteBtn.addEventListener('click', () => {
         }
     }
     updateScreen();
-})
+});
 
 equalBtn.addEventListener('click', () => {
     if (currentNumber) {
@@ -230,7 +271,7 @@ equalBtn.addEventListener('click', () => {
     currentNumber = '';
     screen.value = answer;
     numberOfCharacters = 0;
-})
+});
 
 decimalPointBtn.addEventListener('click', () => {
     if (currentNumber.includes('.')) return; // prevent multiple decimal points in the same number
@@ -238,4 +279,42 @@ decimalPointBtn.addEventListener('click', () => {
     currentNumber += '.';
     ++numberOfCharacters;
     updateScreen();
-})
+});
+
+openingBraceBtn.addEventListener('click' ,() => {
+    if(numberOfCharacters >= screenLimit) return;
+    if(currentNumber){
+        if(currentNumber[currentNumber.length - 1] === '.') currentNumber += '0'; //adding zero after decimal point if nithing follows it
+        const isInvalid = validateCurrentNumber();
+        if( isInvalid) {
+            alert(isInvalid);
+            return;
+         }
+         expression.push({type: 'number', value: currentNumber});
+         currentNumber = '';
+          // add implicit multiplication if there is no operator between number and '('
+         expression.push({type: 'operator', value: '*'});
+    }
+    expression.push({type: 'brace', value: '('});
+    ++numberOfCharacters;
+    updateScreen();
+
+});
+
+closingBraceBtn.addEventListener('click', () => {
+    if(numberOfCharacters >= screenLimit) return;
+    if(currentNumber){
+        if(currentNumber[currentNumber.length - 1] === '.') currentNumber += '0'; //adding zero after decimal point if nithing follows it
+        const isInvalid = validateCurrentNumber();
+        if( isInvalid) {
+            alert(isInvalid);
+            return;
+         }
+         expression.push({type: 'number', value: currentNumber});
+         currentNumber = '';
+        
+    }
+    expression.push({type: 'brace', value: ')'});
+    ++numberOfCharacters;
+    updateScreen();
+});
