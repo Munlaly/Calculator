@@ -4,6 +4,7 @@ const operatorBtns = document.querySelectorAll('.operator')
 const deleteBtn = document.querySelector('#delete');
 const acBtn = document.querySelector('#clear-all');
 const equalBtn = document.querySelector('#equal');
+const decimalPointBtn = document.querySelector('#decimal-point');
 
 
 let expression = [];
@@ -29,6 +30,17 @@ function isFloat(num){
 
 function mod(a, b) {
     return a - b * Math.floor(a / b);
+}
+
+function validateCurrentNumber(){
+    if (currentNumber === '' || currentNumber === '.') {
+        return 'Invalid number format: incomplete number.';
+    }
+   const decimalCount = currentNumber.split('.').length - 1;
+   if (decimalCount > 1) {
+        return 'Invalid number format: too many decimal points.';
+    }
+    return null;
 }
 
 function toPostfix(tokens){
@@ -66,7 +78,7 @@ function evaluateExpression(expression){
             const operator = token.value;
             if( operator === '√'){
                 const num = stack.pop();
-                if( num <= 0){
+                if( num < 0){
                     alert('Negative square root not allowed!');
                     return;
                 }
@@ -128,10 +140,10 @@ function validateExpression(){
         }
     }
     // parentheses check needed
-    if (currentNumber.split('.').length > 2) {
-        return 'Invalid number format: too many decimal points.';
+    if (currentNumber !== ''){
+    let error = validateCurrentNumber();
+    return error;
     }
-
     return null;
 }
 
@@ -160,9 +172,19 @@ operatorBtns.forEach((op) => {
          ++numberOfCharacters;
         const operator = e.target.innerText;
        if(currentNumber){
+        if(currentNumber[currentNumber.length - 1] === '.') currentNumber += '0'; //adding zero after decimal point if nithing follows it
+        const isInvalid = validateCurrentNumber();
+        if( isInvalid) {
+            alert(isInvalid);
+            return;
+        }
         expression.push({type: 'number', value: currentNumber});
         currentNumber = '';
        }
+        if (expression.length === 0 && operator !== '√') {
+            alert("Expression cannot start with operator: " + operator);
+            return;
+        }
        expression.push({type: 'operator', value: operator});
        updateScreen();
     });
@@ -171,6 +193,7 @@ operatorBtns.forEach((op) => {
 acBtn.addEventListener('click', () => {
     expression = [];
     currentNumber = '';
+    numberOfCharacters = 0;
     updateScreen();
 });
 
@@ -207,4 +230,12 @@ equalBtn.addEventListener('click', () => {
     currentNumber = '';
     screen.value = answer;
     numberOfCharacters = 0;
+})
+
+decimalPointBtn.addEventListener('click', () => {
+    if (currentNumber.includes('.')) return; // prevent multiple decimal points in the same number
+    if (currentNumber === '') currentNumber = '0';
+    currentNumber += '.';
+    ++numberOfCharacters;
+    updateScreen();
 })
