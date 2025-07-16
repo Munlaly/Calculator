@@ -7,11 +7,12 @@ const equalBtn = document.querySelector('#equal');
 const decimalPointBtn = document.querySelector('#decimal-point');
 const openingBraceBtn = document.querySelector('#opening-brace');
 const closingBraceBtn = document.querySelector('#closing-brace');
+const ansBtn = document.querySelector('#answer');
 
 
 let expression = [];
 let currentNumber = '';
-let answer;
+let answer = null;
 const screenLimit = 30;
 let numberOfCharacters = 0;
 
@@ -141,7 +142,7 @@ function evaluateExpression(expression){
     return stack.pop();
 }
 
-function validateExpression(){
+function validateExpression(expression){
     const len = expression.length;
     if(len <= 0 && currentNumber === '')  return 'Empty expression';
     if(currentNumber === '' && expression[len - 1].type === 'operator') return 'Expression cannot end with operator';
@@ -235,6 +236,7 @@ acBtn.addEventListener('click', () => {
     expression = [];
     currentNumber = '';
     numberOfCharacters = 0;
+    answer = null;
     updateScreen();
 });
 
@@ -259,7 +261,7 @@ equalBtn.addEventListener('click', () => {
         currentNumber = '';
     }
 
-    const validationError = validateExpression();
+    const validationError = validateExpression(expression);
     if(validationError){
         alert(validationError);
         return;
@@ -318,3 +320,15 @@ closingBraceBtn.addEventListener('click', () => {
     ++numberOfCharacters;
     updateScreen();
 });
+
+ansBtn.addEventListener('click', () => {
+    if(answer === null) return;
+    if(answer.toString().length + numberOfCharacters - currentNumber.length > screenLimit){
+        alert('Limit of characters passed!');
+        return;
+    }
+     numberOfCharacters -= currentNumber.length;
+    currentNumber = answer.toString();
+    numberOfCharacters += currentNumber.length;
+    updateScreen();
+})
