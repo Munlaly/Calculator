@@ -8,6 +8,8 @@ const decimalPointBtn = document.querySelector('#decimal-point');
 const openingBraceBtn = document.querySelector('#opening-brace');
 const closingBraceBtn = document.querySelector('#closing-brace');
 const ansBtn = document.querySelector('#answer');
+const cursorLeftBtn = document.querySelector('#cursor-left');
+const cursorRighttBtn = document.querySelector('#cursor-right');
 
 
 let expression = [];
