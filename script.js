@@ -298,18 +298,23 @@ acBtn.addEventListener('click', () => {
 });
 
 deleteBtn.addEventListener('click', () => {
-    if(currentNumber){
+    if(cursorPosition === expression.length){
+        if(currentNumber){
         currentNumber = currentNumber.slice(0, -1);
         moveCursor();
         return;
-    }
-    if(expression.length > 0){
-        const last = expression.pop();
-        if(last.type == 'number'){
-            currentNumber = last.value.slice(0,-1);
+        }
+        if(expression.length > 0){
+            const last = expression.pop();
+            moveCursor();
+            return;
         }
     }
-    updateScreen();
+    const token = expression[cursorPosition];
+    if(token && token.type === 'number'){
+         token.value = token.value.slice(0,-1);
+        moveCursor();
+    }
 });
 
 equalBtn.addEventListener('click', () => {
@@ -369,7 +374,7 @@ openingBraceBtn.addEventListener('click' ,() => {
     expression.push({type: 'brace', value: '('});
      cursorPosition = expression.length;
     ++numberOfCharacters;
-    updateScreen();
+    moveCursor();
 
 });
 
@@ -390,7 +395,7 @@ closingBraceBtn.addEventListener('click', () => {
     expression.push({type: 'brace', value: ')'});
     ++numberOfCharacters;
     cursorPosition = expression.length;
-    updateScreen();
+    moveCursor();
 });
 
 ansBtn.addEventListener('click', () => {
