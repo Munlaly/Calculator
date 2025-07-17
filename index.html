@@ -9,11 +9,13 @@
 </head>
 <body>
     <section id="calculator">
-        <input type="text" placeholder="Test" id = "screen" readonly>
+        <input type="text" placeholder="Enter expression" id = "screen" readonly>
         <div id="menu">
-            <div class="row"><button id="clear-all">AC</button>
-            <button id="answer">ANS</button>
-            <button id="delete">Del</button>
+            <div class="row" id = "top-menu-row">
+                <button id="clear-all">AC</button>
+                <button id="github"><a href="https://github.com/Munlaly" target="_blank"><img src="github.png" alt="github"></a></button>
+                <button class="spacer" disabled></button>
+                <button id="delete">Del</button>
             </div>
             <div class="row">
                 <button id = "cursor-left">&larr;</button>
@@ -22,7 +24,6 @@
                 <button id="closing-brace">)</button>
             </div>
         </div>
-        <!--fix buttons -->
         <div id="buttons">
             <div class="row">
                 <button id = "power" class = "operator">^</button>
@@ -49,7 +50,7 @@
                 <button id="add" class = "operator">+</button>
             </div>
             <div class="row">
-                <button id="sign" class = "operator">+/-</button>
+                <button id="answer">ANS</button>
                 <button id="zero" class="number">0</button>
                 <button id="decimal-point" >.</button>
                 <button id="equal">=</button>
