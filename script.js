@@ -17,6 +17,7 @@ let currentNumber = '';
 let answer = null;
 const screenLimit = 30;
 let numberOfCharacters = 0;
+let cursorPosition = 0; //Cursor is inserted anfter alement of expression
 
 const precedence = {
     '+' : 1,
@@ -196,7 +197,7 @@ function updateScreen(){
     if(screen.value == answer) screen.value = '';
     let display = expression.map( (element) => element.value + ' ');
     if(currentNumber) display.push(currentNumber);
-    screen.value = display.join(' ');
+    screen.value = display.join(' ') + '|';
 
 }
 
