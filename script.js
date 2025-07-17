@@ -323,11 +323,22 @@ equalBtn.addEventListener('click', () => {
 });
 
 decimalPointBtn.addEventListener('click', () => {
-    if (currentNumber.includes('.')) return; // prevent multiple decimal points in the same number
-    if (currentNumber === '') currentNumber = '0';
-    currentNumber += '.';
-    ++numberOfCharacters;
-    updateScreen();
+    if (cursorPosition === expression.length){
+        if (currentNumber.includes('.')) return; // prevent multiple decimal points in the same number
+        if (currentNumber === '') currentNumber = '0';
+        currentNumber += '.';
+        ++numberOfCharacters;
+        cursorPosition = expression.length;
+        moveCursor();
+    }
+    else{
+        const token = expression[cursorPosition];
+        if(token && token.type === 'number'){
+                token.value = token.value + '.'; 
+                ++numberOfCharacters;
+                moveCursor();
+            }
+    }
 });
 
 openingBraceBtn.addEventListener('click' ,() => {
@@ -394,7 +405,7 @@ cursorLeftBtn.addEventListener('click', () => {
 cursorRightBtn.addEventListener('click', () => {
     let tokens = [...expression];
     if (currentNumber !== '') tokens.push({ type: 'number', value: currentNumber });
-    if(cursorPosition < tokens.length){
+    if(cursorPosition < tokens.length - 1){
         ++cursorPosition;
         moveCursor();
     }
