@@ -255,19 +255,21 @@ numberBtns.forEach((btn) =>{
 operatorBtns.forEach((op) => {
     op.addEventListener('click', (e) =>{
         if(cursorPosition === expression.length){
-         if(numberOfCharacters >= screenLimit) return;
-         ++numberOfCharacters;
-        const operator = e.target.innerText;
-       if(currentNumber){
-        if(currentNumber[currentNumber.length - 1] === '.') currentNumber += '0'; //adding zero after decimal point if nithing follows it
-        const isInvalid = validateCurrentNumber();
-        if( isInvalid) {
-            alert(isInvalid);
-            return;
-        }
-        expression.push({type: 'number', value: currentNumber});
-        currentNumber = '';
-       cursorPosition = expression.length;
+            const prev = expression[cursorPosition - 1];
+            if (prev && prev.type === 'operator') return;
+             if(numberOfCharacters >= screenLimit) return;
+            ++numberOfCharacters;
+            const operator = e.target.innerText;
+            if(currentNumber){
+            if(currentNumber[currentNumber.length - 1] === '.') currentNumber += '0'; //adding zero after decimal point if nithing follows it
+            const isInvalid = validateCurrentNumber();
+            if( isInvalid) {
+                alert(isInvalid);
+                return;
+            }
+            expression.push({type: 'number', value: currentNumber});
+            currentNumber = '';
+            cursorPosition = expression.length;
        }
         if (expression.length === 0 && operator !== '√') {
             alert("Expression cannot start with operator: " + operator);
