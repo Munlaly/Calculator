@@ -17,7 +17,7 @@ let currentNumber = '';
 let answer = null;
 const screenLimit = 30;
 let numberOfCharacters = 0;
-let cursorPosition = 1; //Cursor is inserted anfter alement of expression
+let cursorPosition = 0; //Cursor is inserted anfter alement of expression
 
 const precedence = {
     '+' : 1,
@@ -224,11 +224,18 @@ function moveCursor(){
 numberBtns.forEach((btn) =>{
     btn.addEventListener('click', (e) =>{
         if(numberOfCharacters >= screenLimit) return;
+        //cursor is at the end of expression
+        if(cursorPosition === expression.length){
         const currentDigit = e.target.innerText;
         currentNumber += currentDigit;
         ++numberOfCharacters;
-        cursorPosition = expression.length + 1;
-        updateScreen();
+        moveCursor();
+        }
+        else if(expression[cursorPosition - 1] .type === 'number'){
+            expression[cursorPosition - 1].value += btn.innerText;
+            ++numberOfCharacters;
+            moveCursor();
+        }
     });
 });
 
@@ -263,6 +270,7 @@ acBtn.addEventListener('click', () => {
     currentNumber = '';
     numberOfCharacters = 0;
     answer = null;
+    cursorPosition = 0;
     updateScreen();
 });
 
