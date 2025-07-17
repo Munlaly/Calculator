@@ -9,7 +9,7 @@ const openingBraceBtn = document.querySelector('#opening-brace');
 const closingBraceBtn = document.querySelector('#closing-brace');
 const ansBtn = document.querySelector('#answer');
 const cursorLeftBtn = document.querySelector('#cursor-left');
-const cursorRighttBtn = document.querySelector('#cursor-right');
+const cursorRightBtn = document.querySelector('#cursor-right');
 
 
 let expression = [];
@@ -17,7 +17,7 @@ let currentNumber = '';
 let answer = null;
 const screenLimit = 30;
 let numberOfCharacters = 0;
-let cursorPosition = 0; //Cursor is inserted anfter alement of expression
+let cursorPosition = 1; //Cursor is inserted anfter alement of expression
 
 const precedence = {
     '+' : 1,
@@ -199,6 +199,26 @@ function updateScreen(){
     if(currentNumber) display.push(currentNumber);
     screen.value = display.join(' ') + '|';
 
+ }
+
+function moveCursor(){
+    let tokens = [...expression];
+    if (currentNumber !== '') {
+        tokens.push({ type: 'number', value: currentNumber });
+    }
+    
+    let disp = [];
+
+    for (let i = 0; i <= tokens.length; ++i) {
+        if (i === cursorPosition) {
+            disp.push('|');
+        }
+        if (i < tokens.length) {
+            disp.push(tokens[i].value);
+        }
+    }
+
+    screen.value = disp.join(' ');
 }
 
 numberBtns.forEach((btn) =>{
@@ -207,6 +227,7 @@ numberBtns.forEach((btn) =>{
         const currentDigit = e.target.innerText;
         currentNumber += currentDigit;
         ++numberOfCharacters;
+        cursorPosition = expression.length + 1;
         updateScreen();
     });
 });
@@ -225,12 +246,14 @@ operatorBtns.forEach((op) => {
         }
         expression.push({type: 'number', value: currentNumber});
         currentNumber = '';
+       cursorPosition = expression.length;
        }
         if (expression.length === 0 && operator !== '√') {
             alert("Expression cannot start with operator: " + operator);
             return;
         }
        expression.push({type: 'operator', value: operator});
+       cursorPosition = expression.length;
        updateScreen();
     });
 });
@@ -246,7 +269,7 @@ acBtn.addEventListener('click', () => {
 deleteBtn.addEventListener('click', () => {
     if(currentNumber){
         currentNumber = currentNumber.slice(0, -1);
-        updateScreen();
+        moveCursor();
         return;
     }
     if(expression.length > 0){
@@ -297,10 +320,12 @@ openingBraceBtn.addEventListener('click' ,() => {
          }
          expression.push({type: 'number', value: currentNumber});
          currentNumber = '';
+          cursorPosition = expression.length;
           // add implicit multiplication if there is no operator between number and '('
          expression.push({type: 'operator', value: '*'});
     }
     expression.push({type: 'brace', value: '('});
+     cursorPosition = expression.length;
     ++numberOfCharacters;
     updateScreen();
 
@@ -317,10 +342,12 @@ closingBraceBtn.addEventListener('click', () => {
          }
          expression.push({type: 'number', value: currentNumber});
          currentNumber = '';
+        cursorPosition = expression.length;
         
     }
     expression.push({type: 'brace', value: ')'});
     ++numberOfCharacters;
+    cursorPosition = expression.length;
     updateScreen();
 });
 
@@ -334,4 +361,20 @@ ansBtn.addEventListener('click', () => {
     currentNumber = answer.toString();
     numberOfCharacters += currentNumber.length;
     updateScreen();
+})
+
+cursorLeftBtn.addEventListener('click', () => {
+    if(cursorPosition > 0){
+       --cursorPosition;
+       moveCursor();
+    }
+})
+
+cursorRightBtn.addEventListener('click', () => {
+    let tokens = [...expression];
+    if (currentNumber !== '') tokens.push({ type: 'number', value: currentNumber });
+    if(cursorPosition < tokens.length){
+        ++cursorPosition;
+        moveCursor();
+    }
 })
