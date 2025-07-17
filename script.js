@@ -211,7 +211,14 @@ function moveCursor(){
 
     for (let i = 0; i <= tokens.length; ++i) {
         if (i === cursorPosition) {
-            disp.push('|');
+            if(i < tokens.length){
+                 disp.push(tokens[i].value + '|');
+                 continue;
+            }
+            else{
+                disp.push('|');
+            }
+           
         }
         if (i < tokens.length) {
             disp.push(tokens[i].value);
@@ -225,17 +232,23 @@ numberBtns.forEach((btn) =>{
     btn.addEventListener('click', (e) =>{
         if(numberOfCharacters >= screenLimit) return;
         //cursor is at the end of expression
-        if(cursorPosition === expression.length){
         const currentDigit = e.target.innerText;
+        if(cursorPosition === expression.length){
         currentNumber += currentDigit;
         ++numberOfCharacters;
+        cursorPosition = expression.length;
         moveCursor();
         }
-        else if(expression[cursorPosition - 1] .type === 'number'){
-            expression[cursorPosition - 1].value += btn.innerText;
-            ++numberOfCharacters;
-            moveCursor();
+        else {
+            const token = expression[cursorPosition];
+            if(token && token.type === 'number'){
+                token.value = token.value + currentDigit; 
+                ++numberOfCharacters;
+                moveCursor();
+            }
+           
         }
+        
     });
 });
 
