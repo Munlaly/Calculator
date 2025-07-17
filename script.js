@@ -254,6 +254,7 @@ numberBtns.forEach((btn) =>{
 
 operatorBtns.forEach((op) => {
     op.addEventListener('click', (e) =>{
+        if(cursorPosition === expression.length){
          if(numberOfCharacters >= screenLimit) return;
          ++numberOfCharacters;
         const operator = e.target.innerText;
@@ -274,7 +275,16 @@ operatorBtns.forEach((op) => {
         }
        expression.push({type: 'operator', value: operator});
        cursorPosition = expression.length;
-       updateScreen();
+       moveCursor();
+    }
+    else{
+        const token = expression[cursorPosition];
+        if(token && token.type === 'operator'){
+            token.value = e.target.innerText;
+            moveCursor();
+        }
+    }
+
     });
 });
 
