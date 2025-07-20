@@ -335,8 +335,10 @@ equalBtn.addEventListener('click', () => {
     answer = evaluateExpression(postfix);
     expression = [];
     currentNumber = '';
-    screen.value = answer;
     numberOfCharacters = 0;
+    cursorPosition = 0;
+    moveCursor();
+    screen.value = answer;
 });
 
 decimalPointBtn.addEventListener('click', () => {
