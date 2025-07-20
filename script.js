@@ -257,7 +257,11 @@ operatorBtns.forEach((op) => {
         if(cursorPosition === expression.length){
             const prev = expression[cursorPosition - 1];
             const operator = e.target.innerText;
-            if((prev && prev.type === 'operator') &&(!currentNumber)) return;
+            // don't return ifoperator is √
+            if(operator === '√'){
+
+            }
+            else if((prev && prev.type === 'operator' ) &&(!currentNumber)) return;
              if(numberOfCharacters >= screenLimit) return;
             if(currentNumber){
             if(currentNumber[currentNumber.length - 1] === '.') currentNumber += '0'; //adding zero after decimal point if nithing follows it
@@ -274,6 +278,17 @@ operatorBtns.forEach((op) => {
             return;
         }
         ++numberOfCharacters;
+        //logic for handling √ operator
+        if(expression.length === 0){
+             expression.push(operator);
+        }
+        else if(operator === '√' && expression[expression.length - 1].type !== 'operator'){
+            if(operator === '√' ){
+            expression.push({type: 'operator', value: '*'});
+            ++numberOfCharacters;
+            }
+        }
+       
        expression.push({type: 'operator', value: operator});
        cursorPosition = expression.length;
        moveCursor();
