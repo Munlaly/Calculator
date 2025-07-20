@@ -307,6 +307,7 @@ deleteBtn.addEventListener('click', () => {
         }
         if(expression.length > 0){
             const last = expression.pop();
+            cursorPosition = expression.length;
             moveCursor();
             return;
         }
