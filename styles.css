@@ -6,14 +6,13 @@
 
 body{
     background-color: #121212;
-    height: 100vh;
+    height: 100svh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 #calculator{
-    
     padding: 20px;
     border: 8px solid #00F5D4;
     border-radius: 10%;
@@ -42,7 +41,7 @@ input{
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    gap: 5px;
+    gap: clamp(5px, 1svw, 15px);
     flex-wrap: wrap;
 }
 
@@ -55,7 +54,7 @@ input{
 .row{
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: clamp(5px, 1svw, 15px);
     width: 100%;
 }
 
@@ -69,11 +68,11 @@ input{
 button{
     background-color: #00BBF9;
     aspect-ratio: 1 / 1;
-    width: 75px;
+    width: clamp(35px, 10svw, 90px);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: larger;
+    font-size: clamp(1rem, 2.5svw, 1.5rem);
     text-shadow: 0 0 4px #00F5D4, 0 0 8px #00F5D4;
     flex: 1;
     max-width: 90px;
@@ -92,7 +91,7 @@ button:active {
 #buttons{
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: clamp(5px, 1svw, 15px);
     width: 100%;
 }
 
