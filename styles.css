@@ -68,7 +68,7 @@ input{
 button{
     background-color: #00BBF9;
     aspect-ratio: 1 / 1;
-    width: clamp(35px, 10svw, 90px);
+    width: clamp(62px, 10svw, 90px);
     display: flex;
     align-items: center;
     justify-content: center;
