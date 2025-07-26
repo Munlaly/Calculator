@@ -349,11 +349,12 @@ equalBtn.addEventListener('click', () => {
     const postfix = toPostfix(expression);
     answer = evaluateExpression(postfix);
     expression = [];
-    currentNumber = '';
+    currentNumber = answer.toString();
     numberOfCharacters = 0;
     cursorPosition = 0;
     moveCursor();
-    screen.value = answer;
+    //screen.value = answer;
+    
 });
 
 decimalPointBtn.addEventListener('click', () => {

@@ -68,14 +68,14 @@ input{
 button{
     background-color: #00BBF9;
     aspect-ratio: 1 / 1;
-    width: clamp(62px, 10svw, 90px);
+    width: clamp(45px, min(8vw, 8svh), 100px);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: clamp(1rem, 2.5svw, 1.5rem);
     text-shadow: 0 0 4px #00F5D4, 0 0 8px #00F5D4;
     flex: 1;
-    max-width: 90px;
+    max-width: 100px;
 }
 
 button:hover {
